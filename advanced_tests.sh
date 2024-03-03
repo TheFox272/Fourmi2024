@@ -22,7 +22,7 @@ export MKL_NUM_THREADS=1
 
 echo "Running advanced tests..."
 mkdir -p results
-echo "SCALABILITY TESTS :" > $OUTPUT_FILE
+echo "ADVANCED TESTS :" > $OUTPUT_FILE
 
 run_command "mpirun -np 1 python3 ants.py $BASIC_PARAMS"
 
