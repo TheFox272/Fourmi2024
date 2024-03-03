@@ -78,7 +78,7 @@ class Maze:
         return maze_img
 
 
-if __name__  == "__main__":
+if __name__ == "__main__":
     import time
     dimensions = (50, 80)
     pg.init()

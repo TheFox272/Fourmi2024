@@ -1,0 +1,19 @@
+BASIC TESTS :
+
+$ mpirun -np 1 python3 ants.py 25 25 500 0.9 0.99 5000
+nbp = 1, Cycle: 5000 / 5000, Temps total : 38.52307 sec, Temps total affichage : 15.53173 sec, Temps total calcul fourmis : 22.78627 sec, Temps total evapo phéromones : 0.03914 sec, FPS : 145.09, nourriture :    2336 
+
+$ mpirun -np 1 python3 ants_display_monoprocess.py 25 25 500 0.9 0.99 5000 : -np 1 python3 ants_computation_monoprocess.py
+nbp = 2, Cycle: 5000 / 5000, Temps total : 23.09369 sec, Temps total affichage : 16.00114 sec, Temps total comm de P0 : 0.11892 sec, Temps total attente de P0 : 6.00888 sec, Temps total comm vers P0 : 0.42337 sec, Temps total evapo phéromones : 0.07877 sec, FPS : 212.32, nourriture :    2336 
+
+$ mpirun -np 1 python3 ants_display.py 25 25 500 0.9 0.99 5000 : -np 2 python3 ants_computation.py
+nbp = 3, Cycle: 5000 / 5000, Temps total : 17.60871 sec, Temps total affichage : 15.64027 sec, Temps total comm de P0 : 0.16643 sec, Temps total attente de P0 : 0.61481 sec, Temps total comm vers P0 : 0.64586 sec, Temps total evapo phéromones : 0.04678 sec, FPS : 312.45, nourriture :    2336 
+
+$ mpirun -np 1 python3 ants_display.py 25 25 500 0.9 0.99 5000 : -np 3 python3 ants_computation.py
+nbp = 4, Cycle: 5000 / 5000, Temps total : 19.6711 sec, Temps total affichage : 16.96224 sec, Temps total comm de P0 : 0.46604 sec, Temps total attente de P0 : 0.32908 sec, Temps total comm vers P0 : 1.32192 sec, Temps total evapo phéromones : 0.05151 sec, FPS : 312.36, nourriture :    2336 
+
+$ mpirun -np 1 python3 ants_display.py 25 25 500 0.9 0.99 5000 : --oversubscribe -np 4 python3 ants_computation.py
+nbp = 5, Cycle: 5000 / 5000, Temps total : 26.60187 sec, Temps total affichage : 17.8839 sec, Temps total comm de P0 : 5.92031 sec, Temps total attente de P0 : 0.71202 sec, Temps total comm vers P0 : 1.35941 sec, Temps total evapo phéromones : 0.06323 sec, FPS : 229.79, nourriture :    2336 
+
+$ mpirun -np 1 python3 ants_display.py 25 25 500 0.9 0.99 5000 : --oversubscribe -np 5 python3 ants_computation.py
+nbp = 6, Cycle: 5000 / 5000, Temps total : 37.17467 sec, Temps total affichage : 27.178 sec, Temps total comm de P0 : 5.95247 sec, Temps total attente de P0 : 0.54059 sec, Temps total comm vers P0 : 2.34392 sec, Temps total evapo phéromones : 0.07615 sec, FPS : 153.54, nourriture :    2336 

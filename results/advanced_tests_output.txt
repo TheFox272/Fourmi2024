@@ -1,0 +1,13 @@
+SCALABILITY TESTS :
+
+$ mpirun -np 1 python3 ants.py 50 50 1000 0.9 0.99 5000
+nbp = 1, Cycle: 5000 / 5000, Temps total : 127.65242 sec, Temps total affichage : 53.1554 sec, Temps total calcul fourmis : 74.14684 sec, Temps total evapo phéromones : 0.03877 sec, FPS :  41.08, nourriture :    2509 
+
+$ mpirun -np 1 python3 ants_display_monoprocess.py 50 50 1000 0.9 0.99 5000 : -np 1 python3 ants_computation_monoprocess.py
+nbp = 2, Cycle: 5000 / 5000, Temps total : 80.94553 sec, Temps total affichage : 57.71502 sec, Temps total comm de P0 : 0.19583 sec, Temps total attente de P0 : 19.79998 sec, Temps total comm vers P0 : 2.47611 sec, Temps total evapo phéromones : 0.13928 sec, FPS :  65.95, nourriture :    2509 
+
+$ mpirun -np 1 python3 ants_display.py 50 50 1000 0.9 0.99 5000 : -np 2 python3 ants_computation.py
+nbp = 3, Cycle: 5000 / 5000, Temps total : 61.39483 sec, Temps total affichage : 57.41503 sec, Temps total comm de P0 : 0.21409 sec, Temps total attente de P0 : 0.13055 sec, Temps total comm vers P0 : 2.90691 sec, Temps total evapo phéromones : 0.08643 sec, FPS :  84.18, nourriture :    2509 
+
+$ mpirun -np 1 python3 ants_display.py 50 50 1000 0.9 0.99 5000 : -np 3 python3 ants_computation.py
+nbp = 4, Cycle: 5000 / 5000, Temps total : 66.27817 sec, Temps total affichage : 61.90792 sec, Temps total comm de P0 : 0.31739 sec, Temps total attente de P0 : 0.13053 sec, Temps total comm vers P0 : 3.14096 sec, Temps total evapo phéromones : 0.08143 sec, FPS :  83.93, nourriture :    2509 
