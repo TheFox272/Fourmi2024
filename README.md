@@ -76,7 +76,7 @@ processus principal (0) exécutera `ants_display_monoprocess.py`, tandis que le 
 Afin de séparer l'affichage et le calcul des fourmis, on va créer deux classes différentes "parentes" à `Colony`. L'une,
 `Colony_compute`, reprendra tous les éléments de `Colony` à l'exception des éléments liés à l'affichage. L'autre,
 `Colony_display`, concentrera les éléments liés à l'affichage. De plus, dans `Colony_compute`, on remplace les appels à 
-`a_maze.maze` par `a_maze` (qui aura bien évidemment la forme attendue). Cela évite au programme `ants_computation.py` 
+`a_maze.maze` par `a_maze` (qui aura bien évidemment la forme attendue). Cela évite au programme `ants_computation_monoprocess.py` 
 d'utiliser pygame, et ne change strictement rien au fonctionnement de la classe. Les deux classes sont placées dans le 
 fichier `colony.py`.  
 
@@ -192,6 +192,9 @@ correspondantes aux fourmis de chaque sous-colonie.
 De même, on va ajouter au `food_counter` actuel la somme des `food_counter` de chaque sous-colonie (qu'on aura rémis à 0 
 au début du cycle) pour obtenir le nouveau `food_counter`. Ainsi, on utilisera simplement un `Reduce` de MPI pour 
 traiter ces deux informations.
+
+Les programmes résultants sont donc des adaptations de ceux permettant la séparation de l'affichage et du calcul : `ants_display.py`
+et `ants_computation.py`.
 
 #### Résultats
 
