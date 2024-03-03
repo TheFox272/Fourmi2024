@@ -36,17 +36,19 @@ nourriture :    2336
 
 ```
 
-![screenshot1](sceenshots/test_1.png)
+![screenshot1](screenshots/test_1.png)
 
 Ainsi, il parait pertinent de séparer l’affichage de la simulation de la mise à jour des fourmis et des phéromones.
 En effet, l’affichage prend environ $40$ % du temps total d'exécution, ce qui est loin d'être négligeable. Ainsi, en 
 observant que $t_{evapo} << t_{affichage}$, on peut espérer au mieux le speedup suivant :  
+
 $S_1 = \frac{t_{total}}{\max(t_{affichage}, t_{fourmis})} = \frac{t_{total}}{t_{fourmis}} \approx 1.7$
 
 **Remarque** : On a supposé que $t_{communication} << t_{affichage}$, il faudra vérifier cette hypothèse.  
 
 Par ailleurs, chaque fourmi ayant un comportement indépendant des autres (aux phéromones près), il semble astucieux de 
-paralléliser leur calcul. Il suffirait de 2 processeurs pour que $t_{affichage$ devienne le facteur limitant :  
+paralléliser leur calcul. Il suffirait de 2 processeurs pour que $t_{affichage}$ devienne le facteur limitant :  
+
 $t_{fourmis}^{&#x2032} = \frac{t_{fourmis}}{2} \approx 11.4 \text{ sec} < t_{affichage} = 15.53173 \text{ sec}$
 
 Ainsi, avec cette méthode, on pourrait espérer un speedup $S_2 = \frac{t_{total}}{t_{affichage}} \approx 2.5$.
@@ -99,7 +101,7 @@ nourriture :    2336
 
 ```
 
-![screenshot2](sceenshots/test_2.png)
+![screenshot2](screenshots/test_2.png)
 
 On retrouve bien `food_counter` $= 2336$, ce qui nous rassure sur le bon fonctionnement de notre parallélisation.  
 
@@ -107,6 +109,7 @@ On observe que $t_{communication} << t_{affichage}$, ce qui est une très bonne 
 communication efficace entre les deux processus. Par ailleurs notre temps d'exécution totale est très proche du temps de 
 calcul des fourmis que l'on obtenait précédemment, ce qui est très encourageant ! En effet, cela signifie que notre 
 parallélisation est quasi-parfaite. D'ailleurs, le speedup que l'on obtient est quasiment celui que l'on avait prédit :  
+
 $S = \frac{38.52307}{23.09369} \approx 1.67 \equiv S1 \approx 1.7$
 
 On a donc à la fois une très bonne parallélisation et une communication très efficace. On va donc pouvoir passer à la 
@@ -156,8 +159,8 @@ faite en amont de tous les résultats présentés dans ce document.
 
 La manière dont les phéromones sont marqués à la fin de la méthode `advance` de `Colony` est problématique. En effet, 
 elle est faite dans un certain ordre, et modifie la matrice des phéromones au cours de son éxécution. Or, la fonction 
-$p(h)$ qui est utilisée pour le marquage des phéromones utilise les cases voisines de h. Ainsi, on ne peut pas exécuter 
-la ligne suivantes sur des sub-colonies sans risquer de modifier la matrice des phéromones de manière incohérente :  
+$p(h)$ qui est utilisée pour le marquage des phéromones utilise les cases voisines de $h$. Ainsi, on ne peut pas exécuter 
+la ligne suivante sur des sub-colonies sans risquer de modifier la matrice des phéromones de manière incohérente :  
 ```python
 [pheromones.mark(self.historic_path[i, self.age[i], :],
                 [has_north_exit[i], has_east_exit[i], has_west_exit[i], has_south_exit[i]]) for i in range(self.directions.shape[0])]
@@ -186,7 +189,6 @@ regrouper de manière cohérente, on va simplement prendre le maximum de chaque 
 effet, le marquage des phéromones via la fonction $p(h)$ ne pouvant que faire croître la valeur des phéromones (postulat 
 que l'on admettra), la prise du maximum nous donnera bien la matrice des phéromones où l'on aura modifié les cases 
 correspondantes aux fourmis de chaque sous-colonie.  
-
 De même, on va ajouter au `food_counter` actuel la somme des `food_counter` de chaque sous-colonie (qu'on aura rémis à 0 
 au début du cycle) pour obtenir le nouveau `food_counter`. Ainsi, on utilisera simplement un `Reduce` de MPI pour 
 traiter ces deux informations.
@@ -208,13 +210,14 @@ nourriture :    2336
 
 ```
 
-![screenshot3](sceenshots/test_3.png)
+![screenshot3](screenshots/test_3.png)
 
 Encore une fois, on retrouve bien `food_counter` $= 2336$. De plus, on observe que $t_{communication}$ a augmenté, mais 
 est toujours négligeable devant $t_{affichage}$.  
 
 Le plus intéressant est que le temps d'attente de P0 est devenu négligeable, ce qui signifie qu'on a bien 
 $t_{fourmis}^{&#x2032} < t_{affichage}$. D'ailleurs le speedup obtenu est encore une fois très correct :  
+
 $S = \frac{38.52307}{17.60871} \approx 2.19 \equiv S2 \approx 2.5$
 
 Autre fait intéressant, visible sur le system monitor : les deux processus MPI chargé de calculer les fourmis ne sont 
@@ -238,7 +241,7 @@ FPS : 312.36,
 nourriture :    2336 
 ```
 
-![screenshot4](sceenshots/test_4.png)
+![screenshot4](screenshots/test_4.png)
 
 Bon ici, on voit que le temps d'affichage a légèrement augmenté, et ce apparement sans raison. Dans l'analyse suivante, 
 on fera comme s'il n'avait pas bougé.  
@@ -256,7 +259,8 @@ Traçons le graphe de $S$ en fonction de `nbp` pour mettre ceci en perspective :
 
 **Remarque** : Pour 2 processus, on retrouve simplement la séparation de l'affichage et du calcul des fourmis.
 
-Ici, la courbe théorique, qui néglige le temps de communication, correspond à :
+Ici, la courbe théorique, qui néglige le temps de communication, correspond à :  
+
 $y = \dfrac{t_{total}}{\max(t_{affichage}, \frac{t_{fourmis}}{nbp-1}) + t_{evapo}}$.
 
 On remarque qu'au dela de 4 processeurs les performances chutent fortement. Cela est dû au fait que l'on a atteint la 
